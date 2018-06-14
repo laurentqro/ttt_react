@@ -3,25 +3,36 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Cell extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null
-    };
-  }
-
   render() {
     return (
-      <button className="cell" onClick={() => this.setState({value: 'X'})}>
-        {this.state.value}
+      <button className="cell" onClick={() => this.props.onClick()}>
+        {this.props.value}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cells: Array(9).fill(null)
+    };
+  }
+
+  handleClick(i) {
+    const cells = this.state.cells.slice();
+    cells[i] = 'X';
+    this.setState({cells: cells});
+  }
+
   renderCell(i) {
-    return <Cell position={i + 1} />;
+    return (
+      <Cell
+        value={this.state.cells[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    );
   }
 
   render() {
