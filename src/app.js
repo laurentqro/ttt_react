@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+class Cell extends React.Component {
   render() {
     return (
-      <button className="square">
+      <button className="cell">
         {this.props.position}
       </button>
     );
@@ -13,8 +13,8 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
-    return <Square position={i + 1} />;
+  renderCell(i) {
+    return <Cell position={i + 1} />;
   }
 
   render() {
@@ -22,19 +22,19 @@ class Board extends React.Component {
       <div>
         <div className="status">{status}</div>
         <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {this.renderCell(0)}
+          {this.renderCell(1)}
+          {this.renderCell(2)}
         </div>
         <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+          {this.renderCell(3)}
+          {this.renderCell(4)}
+          {this.renderCell(5)}
         </div>
         <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
+          {this.renderCell(6)}
+          {this.renderCell(7)}
+          {this.renderCell(8)}
         </div>
       </div>
     );
