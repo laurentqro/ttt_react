@@ -14,14 +14,16 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cells: Array(9).fill(null)
+      cells: Array(9).fill(null),
+      currentPlayer: 'X',
     };
   }
 
   handleClick(i) {
     const cells = this.state.cells.slice();
-    cells[i] = 'X';
-    this.setState({cells: cells});
+    cells[i] = this.state.currentPlayer;
+    let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
+    this.setState({cells: cells, currentPlayer: nextPlayer});
   }
 
   renderCell(i) {
@@ -34,6 +36,8 @@ class Board extends React.Component {
   }
 
   render() {
+    const status = 'Current player: ' + (this.state.currentPlayer);
+
     return (
       <div>
         <div className="status">{status}</div>
