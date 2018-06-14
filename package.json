@@ -2,9 +2,11 @@
   "name": "ttt_react",
   "version": "1.0.0",
   "description": "Tic Tac Toe with React",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack-dev-server --content-base dist"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,8 @@
     "babel-preset-react": "^6.24.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "webpack": "^4.12.0"
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.6",
+    "webpack-dev-server": "^3.1.4"
   }
 }
