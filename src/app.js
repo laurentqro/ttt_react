@@ -15,45 +15,19 @@ function Cell(props) {
 }
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      board: new CoreBoard(),
-      currentPlayer: 'X',
-    };
-  }
-
-  handleClick(i) {
-    if (this.state.board.cellAtPosition(i + 1).isAvailable()) {
-      let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
-      let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
-      this.setState({board: board, currentPlayer: nextPlayer});
-    }
-  }
-
   renderCell(i) {
     return (
       <Cell
-        value={this.state.board.cellAtPosition(i + 1).symbol}
-        onClick={() => this.handleClick(i)}
+        value={this.props.board.cellAtPosition(i + 1).symbol}
+        onClick={() => this.props.onClick(i)}
       />
     );
-  }
-
-  renderStatus() {
-    if (this.state.board.hasWin()) {
-      return `Player ${this.state.board.winningSymbol()} wins!`;
-    } else if (this.state.board.hasTie()) {
-      return 'Tie!';
-    } else {
-      return `${this.state.currentPlayer}'s turn`;
-    }
   }
 
   render() {
     return (
       <div>
-        <div className="status">{this.renderStatus()}</div>
+        <div className="status">{this.props.status}</div>
         <div className="board-row">
           {this.renderCell(0)}
           {this.renderCell(1)}
@@ -75,15 +49,47 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      board: new CoreBoard(),
+      currentPlayer: 'X',
+    }
+  }
+
   render() {
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board
+            board={this.state.board}
+            currentPlayer={this.state.currentPlayer}
+            status={this.status()}
+            onClick={(i) => this.handleClick(i)}
+        />
         </div>
       </div>
     );
   }
+
+  handleClick(i) {
+    if (this.state.board.cellAtPosition(i + 1).isAvailable()) {
+      let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
+      let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
+      this.setState({board: board, currentPlayer: nextPlayer});
+    }
+  }
+
+  status() {
+    if (this.state.board.hasWin()) {
+      return `Player ${this.state.board.winningSymbol()} wins!`;
+    } else if (this.state.board.hasTie()) {
+      return 'Tie!';
+    } else {
+      return `${this.state.currentPlayer}'s turn`;
+    }
+  }
+
 }
 
 const app = document.getElementById('app')
