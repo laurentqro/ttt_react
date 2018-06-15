@@ -67,9 +67,20 @@ class Game extends React.Component {
             status={this.status()}
             onClick={(i) => this.handleClick(i)}
         />
+          {this.renderReplayButton()}
         </div>
       </div>
     );
+  }
+
+  renderReplayButton() {
+    if (this.state.board.hasWin() || this.state.board.hasTie()) {
+      return (
+        <div className="replay">
+          <button onClick={() => this.handleReplay()}>Play Again</button>
+        </div>
+      );
+    }
   }
 
   handleClick(i) {
@@ -78,6 +89,13 @@ class Game extends React.Component {
       let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
       this.setState({board: board, currentPlayer: nextPlayer});
     }
+  }
+
+  handleReplay() {
+    this.setState({
+      board: new CoreBoard(),
+      currentPlayer: 'X',
+    });
   }
 
   status() {
