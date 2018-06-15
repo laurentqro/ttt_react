@@ -4,9 +4,12 @@ import './index.css';
 import CoreBoard from './core/board';
 
 function Cell(props) {
+  let className = props.value ? 'spin ' : '';
+  className += props.value
+
   return (
     <button className="cell" onClick={props.onClick}>
-      {props.value}
+      <div className={className}>{props.value}</div>
     </button>
   );
 }

@@ -21,15 +21,20 @@ ol, ul {
   background: #fff;
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 80px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 120px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 120px;
+  transition: 0.5s ease;
+}
+
+.spin {
+  animation: spin 1s ease;
 }
 
 .cell:focus {
@@ -47,4 +52,24 @@ ol, ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+.X {
+  color: red;
+}
+
+.O {
+  color: blue;
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+    opacity: 0;
+  }
+
+  to {
+    transform: rotateY(180deg);
+    opacity: 1;
+  }
 }
