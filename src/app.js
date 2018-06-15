@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import CoreBoard from './core/board';
 
 function Cell(props) {
   return (
@@ -14,22 +15,22 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cells: Array(9).fill(null),
+      board: new CoreBoard(),
       currentPlayer: 'X',
     };
   }
 
   handleClick(i) {
-    const cells = this.state.cells.slice();
-    cells[i] = this.state.currentPlayer;
+    let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
     let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
-    this.setState({cells: cells, currentPlayer: nextPlayer});
+    this.setState({board: board, currentPlayer: nextPlayer});
   }
 
   renderCell(i) {
+    console.log(this.state.board.cellAtPosition(i + 1));
     return (
       <Cell
-        value={this.state.cells[i]}
+        value={this.state.board.cellAtPosition(i + 1).symbol}
         onClick={() => this.handleClick(i)}
       />
     );
