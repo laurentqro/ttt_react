@@ -27,7 +27,6 @@ class Board extends React.Component {
   }
 
   renderCell(i) {
-    console.log(this.state.board.cellAtPosition(i + 1));
     return (
       <Cell
         value={this.state.board.cellAtPosition(i + 1).symbol}
@@ -36,12 +35,20 @@ class Board extends React.Component {
     );
   }
 
-  render() {
-    const status = 'Current player: ' + (this.state.currentPlayer);
+  renderStatus() {
+    if (this.state.board.hasWin()) {
+      return `Player ${this.state.board.winningSymbol()} wins!`;
+    } else if (this.state.board.hasTie()) {
+      return 'Tie!';
+    } else {
+      return 'Current player: ' + (this.state.currentPlayer);
+    }
+  }
 
+  render() {
     return (
       <div>
-        <div className="status">{status}</div>
+        <div className="status">{this.renderStatus()}</div>
         <div className="board-row">
           {this.renderCell(0)}
           {this.renderCell(1)}
