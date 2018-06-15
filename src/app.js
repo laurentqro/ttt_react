@@ -24,9 +24,11 @@ class Board extends React.Component {
   }
 
   handleClick(i) {
-    let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
-    let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
-    this.setState({board: board, currentPlayer: nextPlayer});
+    if (this.state.board.cellAtPosition(i + 1).isAvailable()) {
+      let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
+      let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
+      this.setState({board: board, currentPlayer: nextPlayer});
+    }
   }
 
   renderCell(i) {
