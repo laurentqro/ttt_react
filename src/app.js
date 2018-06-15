@@ -44,7 +44,7 @@ class Board extends React.Component {
     } else if (this.state.board.hasTie()) {
       return 'Tie!';
     } else {
-      return 'Current player: ' + (this.state.currentPlayer);
+      return `${this.state.currentPlayer}'s turn`;
     }
   }
 
