@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import CoreBoard from './core/board';
+import { TTT } from '../vendor/ttt/ttt';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
@@ -52,7 +52,7 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: new CoreBoard(),
+      board: TTT.newBoard(),
       currentPlayer: 'X',
     }
   }
@@ -93,7 +93,7 @@ class Game extends React.Component {
 
   handleReplay() {
     this.setState({
-      board: new CoreBoard(),
+      board: TTT.newBoard(),
       currentPlayer: 'X',
     });
   }
