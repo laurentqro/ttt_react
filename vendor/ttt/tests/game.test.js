@@ -1,7 +1,8 @@
 const expect = require('chai').expect;
-const PlayerStub = require('./playerStub.js');
-const Game = require('../lib/game.js');
-const Board = require('../lib/board.js');
+
+import PlayerStub from './playerStub';
+import Game from '../lib/game';
+import Board from '../lib/board';
 
 it('is not over at start', () => {
   let game = new Game();

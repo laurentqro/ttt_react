@@ -7,6 +7,7 @@ export default class Game {
     this.playerX = playerX;
     this.playerO = playerO;
     this.currentPlayer = playerX;
+    this.status = `${playerX}'s turn`;
   }
 
   play() {

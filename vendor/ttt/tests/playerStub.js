@@ -1,6 +1,6 @@
-const Player = require('../lib/player.js');
+import Player from '../lib/player';
 
-module.exports = class PlayerStub extends Player {
+export default class PlayerStub extends Player {
   constructor(symbol) {
     super(symbol);
     this.moves = [];

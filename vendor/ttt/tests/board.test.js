@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const Board = require('../lib/board.js');
+import Board from '../lib/board';
 
 it('is empty', () => {
   let board = new Board();

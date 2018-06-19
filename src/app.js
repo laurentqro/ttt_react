@@ -18,7 +18,7 @@ class Board extends React.Component {
   renderCell(i) {
     return (
       <Cell
-        value={this.props.board.cellAtPosition(i + 1).symbol}
+        value={this.props.board.getCellAtPosition(i + 1).symbol}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -27,7 +27,6 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="status">{this.props.status}</div>
         <div className="board-row">
           {this.renderCell(0)}
           {this.renderCell(1)}
@@ -60,12 +59,15 @@ class Main extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
+          <div className="status">
+            {this.state.game.status}
+          </div>
+
           <Board
-            board={this.state.board}
-            currentPlayer={this.state.currentPlayer}
-            status={this.status()}
+            board={this.state.game.board}
+            status={this.state.game.status}
             onClick={(i) => this.handleClick(i)}
-        />
+          />
           {this.renderReplayButton()}
         </div>
       </div>
@@ -73,7 +75,7 @@ class Main extends React.Component {
   }
 
   renderReplayButton() {
-    if (this.state.board.hasWin() || this.state.board.hasTie()) {
+    if (this.state.game.isOver()) {
       return (
         <div className="replay">
           <button onClick={() => this.handleReplay()}>Play Again</button>
@@ -83,30 +85,14 @@ class Main extends React.Component {
   }
 
   handleClick(i) {
-    if (this.state.board.cellAtPosition(i + 1).isAvailable()) {
-      let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
-      let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
-      this.setState({board: board, currentPlayer: nextPlayer});
-    }
+    console.log("click");
   }
 
   handleReplay() {
     this.setState({
-      board: TTT.newBoard(),
-      currentPlayer: 'X',
+      game: new Game()
     });
   }
-
-  status() {
-    if (this.state.board.hasWin()) {
-      return `Player ${this.state.board.winningSymbol()} wins!`;
-    } else if (this.state.board.hasTie()) {
-      return 'Tie!';
-    } else {
-      return `${this.state.currentPlayer}'s turn`;
-    }
-  }
-
 }
 
 const app = document.getElementById('app')
