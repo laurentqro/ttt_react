@@ -1,7 +1,10 @@
-export default class Cell {
-  constructor(position) {
-    this.position = position;
+module.exports = class Cell {
+  constructor() {
     this.symbol = null;
+  }
+
+  getSymbol() {
+    return this.symbol;
   }
 
   markWithSymbol(symbol) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { TTT } from '../vendor/ttt/ttt';
+import { Game } from '../vendor/ttt/game';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
