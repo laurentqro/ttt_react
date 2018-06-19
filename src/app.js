@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Game } from '../vendor/ttt/game';
+import Game from '../vendor/ttt/lib/game';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
@@ -48,12 +48,11 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: TTT.newBoard(),
-      currentPlayer: 'X',
+      game: new Game()
     }
   }
 
@@ -111,4 +110,4 @@ class Game extends React.Component {
 }
 
 const app = document.getElementById('app')
-ReactDOM.render(<Game />, app)
+ReactDOM.render(<Main />, app)

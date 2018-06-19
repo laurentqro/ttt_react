@@ -1,7 +1,7 @@
-const Line = require('./line.js');
-const Cell = require('./cell.js');
+import Line from './line';
+import Cell from './cell';
 
-module.exports = class Board {
+export default class Board {
   constructor() {
     this.grid = [
       new Cell(), new Cell(), new Cell(),

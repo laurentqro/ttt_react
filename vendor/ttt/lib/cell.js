@@ -1,4 +1,4 @@
-module.exports = class Cell {
+export default class Cell {
   constructor() {
     this.symbol = null;
   }

@@ -1,4 +1,4 @@
-module.exports = class Player {
+export default class Player {
   constructor(symbol, cli) {
     this.symbol = symbol;
     this.cli = cli;

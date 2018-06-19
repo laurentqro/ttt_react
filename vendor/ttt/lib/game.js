@@ -1,7 +1,7 @@
-const Board = require('./board.js');
-const Player = require('./player.js');
+import Player from './player';
+import Board from './board';
 
-module.exports = class Game {
+export default class Game {
   constructor(playerX, playerO) {
     this.board = new Board();
     this.playerX = playerX;

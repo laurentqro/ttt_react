@@ -1,4 +1,4 @@
-module.exports = class Line {
+export default class  Line {
   constructor(...cells) {
     this.cells = cells;
   }
