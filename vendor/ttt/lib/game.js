@@ -2,12 +2,12 @@ import Player from './player';
 import Board from './board';
 
 export default class Game {
-  constructor(playerX, playerO) {
+  constructor(ui, playerX, playerO) {
+    this.ui = ui;
     this.board = new Board();
     this.playerX = playerX;
     this.playerO = playerO;
     this.currentPlayer = playerX;
-    this.status = `${playerX}'s turn`;
   }
 
   play() {
@@ -23,18 +23,18 @@ export default class Game {
   }
 
   startGame() {
-    console.log("Welcome to Tic Tac Toe");
+    ui.greetPlayers();
   }
 
   async playTurn() {
-    this.printBoard();
-    console.log(`Player ${this.currentPlayer.getSymbol()}, it's your turn.`);
+    this.ui.printBoard(this.board);
+    this.ui.announcePlayerTurn(`Player ${this.currentPlayer.getSymbol()}, it's your turn.`);
 
     let input = await this.currentPlayer.getInput();
 
     this.markBoard(input.move);
     this.switchPlayers();
-    this.play();
+    this.ui.printBoard(this.board);
   }
 
   markBoard(position) {
@@ -46,15 +46,11 @@ export default class Game {
     this.currentPlayer = nextPlayer;
   }
 
-  printBoard() {
-    console.log(this.board);
-  }
-
   endGame() {
     if (this.board.hasWin()) {
-      console.log(`Player ${this.board.getWinningSymbol()} wins!`);
+      this.ui.announceWinner(`Player ${this.board.getWinningSymbol()} wins!`);
     } else {
-      console.log(`It's a tie!`);
+      this.ui.announceTie(`It's a tie!`);
     }
   }
 }

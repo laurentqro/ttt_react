@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Game from '../vendor/ttt/lib/game';
+import Player from '../vendor/ttt/lib/player';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
@@ -47,12 +48,35 @@ class Board extends React.Component {
   }
 }
 
+class WebPlayer extends Player {
+  constructor(symbol) {
+    super(symbol)
+
+    this.nextMove = 1
+  }
+
+  getInput() {
+    return {
+      move: this.nextMove
+    }
+  }
+}
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
+    const playerX = new WebPlayer('X');
+    const playerO = new WebPlayer('O');
+
+    const game = new Game(this, playerX, playerO)
     this.state = {
-      game: new Game()
+      game: game,
+      board: game.board
     }
+  }
+
+  componentDidMount() {
+    this.state.game.playTurn();
   }
 
   render() {
@@ -60,12 +84,11 @@ class Main extends React.Component {
       <div className="game">
         <div className="game-board">
           <div className="status">
-            {this.state.game.status}
+            {this.state.message}
           </div>
 
           <Board
-            board={this.state.game.board}
-            status={this.state.game.status}
+            board={this.state.board}
             onClick={(i) => this.handleClick(i)}
           />
           {this.renderReplayButton()}
@@ -85,13 +108,26 @@ class Main extends React.Component {
   }
 
   handleClick(i) {
-    console.log("click");
+    this.state.game.currentPlayer.nextMove = i + 1;
+    this.state.game.playTurn();
   }
 
   handleReplay() {
     this.setState({
-      game: new Game()
+      game: new Game(),
     });
+  }
+
+  printBoard(board) {
+    this.setState({
+      board: board
+    });
+  }
+
+  announcePlayerTurn(message) {
+    this.setState({
+      message: message
+    })
   }
 }
 
