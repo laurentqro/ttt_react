@@ -1,0 +1,26 @@
+{
+  "name": "ttt_nodejs",
+  "version": "1.0.0",
+  "description": "A NodeJS implementation of Tic Tac Toe",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --require babel-register /vendor/ttt/tests/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurentqro/ttt_nodejs.git"
+  },
+  "author": "Laurent Curau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laurentqro/ttt_nodejs/issues"
+  },
+  "homepage": "https://github.com/laurentqro/ttt_nodejs#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "inquirer": "^6.0.0"
+  }
+}

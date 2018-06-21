@@ -1,4 +1,4 @@
-export default class Line {
+export default class  Line {
   constructor(...cells) {
     this.cells = cells;
   }
@@ -12,10 +12,10 @@ export default class Line {
   }
 
   hasIdenticalSymbols() {
-    return this.markedCells().every(cell => cell.symbol === this.cells[0].symbol);
+    return this.getMarkedCells().every(cell => cell.getSymbol() === this.cells[0].getSymbol());
   }
 
-  markedCells() {
+  getMarkedCells() {
     return this.cells.filter(cell => cell.isTaken());
   }
 }

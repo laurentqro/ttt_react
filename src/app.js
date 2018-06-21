@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import CoreBoard from './core/board';
+import Game from '../vendor/ttt/lib/game';
+import Player from '../vendor/ttt/lib/player';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
@@ -18,7 +19,7 @@ class Board extends React.Component {
   renderCell(i) {
     return (
       <Cell
-        value={this.props.board.cellAtPosition(i + 1).symbol}
+        value={this.props.board.getCellAtPosition(i + 1).symbol}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -27,7 +28,6 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="status">{this.props.status}</div>
         <div className="board-row">
           {this.renderCell(0)}
           {this.renderCell(1)}
@@ -48,25 +48,49 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
+class WebPlayer extends Player {
+  constructor(symbol) {
+    super(symbol)
+
+    this.nextMove = 1
+  }
+
+  getInput() {
+    return {
+      move: this.nextMove
+    }
+  }
+}
+
+class Main extends React.Component {
   constructor(props) {
     super(props);
+    const playerX = new WebPlayer('X');
+    const playerO = new WebPlayer('O');
+
+    const game = new Game(this, playerX, playerO)
     this.state = {
-      board: new CoreBoard(),
-      currentPlayer: 'X',
+      game: game,
+      board: game.board
     }
+  }
+
+  componentDidMount() {
+    this.state.game.playTurn();
   }
 
   render() {
     return (
       <div className="game">
         <div className="game-board">
+          <div className="status">
+            {this.state.message}
+          </div>
+
           <Board
             board={this.state.board}
-            currentPlayer={this.state.currentPlayer}
-            status={this.status()}
             onClick={(i) => this.handleClick(i)}
-        />
+          />
           {this.renderReplayButton()}
         </div>
       </div>
@@ -74,7 +98,7 @@ class Game extends React.Component {
   }
 
   renderReplayButton() {
-    if (this.state.board.hasWin() || this.state.board.hasTie()) {
+    if (this.state.game.isOver()) {
       return (
         <div className="replay">
           <button onClick={() => this.handleReplay()}>Play Again</button>
@@ -84,31 +108,28 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    if (this.state.board.cellAtPosition(i + 1).isAvailable()) {
-      let board = this.state.board.markCellAtPosition(i + 1, this.state.currentPlayer);
-      let nextPlayer = this.state.currentPlayer == 'X' ? 'O' : 'X';
-      this.setState({board: board, currentPlayer: nextPlayer});
-    }
+    this.state.game.currentPlayer.nextMove = i + 1;
+    this.state.game.playTurn();
   }
 
   handleReplay() {
     this.setState({
-      board: new CoreBoard(),
-      currentPlayer: 'X',
+      game: new Game(),
     });
   }
 
-  status() {
-    if (this.state.board.hasWin()) {
-      return `Player ${this.state.board.winningSymbol()} wins!`;
-    } else if (this.state.board.hasTie()) {
-      return 'Tie!';
-    } else {
-      return `${this.state.currentPlayer}'s turn`;
-    }
+  printBoard(board) {
+    this.setState({
+      board: board
+    });
   }
 
+  announcePlayerTurn(message) {
+    this.setState({
+      message: message
+    })
+  }
 }
 
 const app = document.getElementById('app')
-ReactDOM.render(<Game />, app)
+ReactDOM.render(<Main />, app)

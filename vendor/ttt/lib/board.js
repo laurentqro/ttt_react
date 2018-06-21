@@ -2,11 +2,11 @@ import Line from './line';
 import Cell from './cell';
 
 export default class Board {
-  constructor(cells) {
-    this.cells = cells || [
-      new Cell(1), new Cell(2), new Cell(3),
-      new Cell(4), new Cell(5), new Cell(6),
-      new Cell(7), new Cell(8), new Cell(9)
+  constructor() {
+    this.cells = [
+      new Cell(), new Cell(), new Cell(),
+      new Cell(), new Cell(), new Cell(),
+      new Cell(), new Cell(), new Cell()
     ]
   }
 
@@ -20,12 +20,12 @@ export default class Board {
     return new Board(cells);
   }
 
-  cellAtPosition(position) {
+  getCellAtPosition(position) {
     return this.cells[position - 1];
   }
 
   hasTie() {
-    return this.isFull() && !this.hasWin();
+    return (this.isFull() && !this.hasWin());
   }
 
   isFull() {
@@ -63,17 +63,13 @@ export default class Board {
     ]
   }
 
-  winningSymbol() {
+  getWinningSymbol() {
     if (!this.hasWin()) {
       return null;
     } else {
       let winningLine = this.lines().filter(line => line.hasWin())[0];
-      let winningSymbol = winningLine.cells[0].symbol;
+      let winningSymbol = winningLine.cells[0].getSymbol();
       return winningSymbol;
     }
-  }
-
-  availableMoves() {
-    return this.cells.filter(cell => cell.isAvailable()).map(cell => cell.position);
   }
 }
