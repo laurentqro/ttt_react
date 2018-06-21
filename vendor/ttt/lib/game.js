@@ -22,19 +22,17 @@ export default class Game {
     return this.board.hasWin() || this.board.hasTie();
   }
 
-  startGame() {
-    ui.greetPlayers();
+  start() {
+    this.ui.greetPlayers();
   }
 
   async playTurn() {
-    this.ui.printBoard(this.board);
-    this.ui.announcePlayerTurn(`Player ${this.currentPlayer.getSymbol()}, it's your turn.`);
-
     let input = await this.currentPlayer.getInput();
-
     this.markBoard(input.move);
     this.switchPlayers();
+    this.ui.announcePlayerTurn(this.currentPlayer.getSymbol());
     this.ui.printBoard(this.board);
+    this.endGame();
   }
 
   markBoard(position) {
@@ -48,9 +46,9 @@ export default class Game {
 
   endGame() {
     if (this.board.hasWin()) {
-      this.ui.announceWinner(`Player ${this.board.getWinningSymbol()} wins!`);
-    } else {
-      this.ui.announceTie(`It's a tie!`);
+      this.ui.announceWinner(this.board.getWinningSymbol());
+    } else if (this.board.hasTie()) {
+      this.ui.announceTie();
     }
   }
 }

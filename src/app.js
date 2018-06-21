@@ -76,7 +76,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    this.state.game.playTurn();
+    this.state.game.start();
   }
 
   render() {
@@ -113,9 +113,16 @@ class Main extends React.Component {
   }
 
   handleReplay() {
+    console.log('replay');
+    const playerX = new WebPlayer('X');
+    const playerO = new WebPlayer('O');
+
+    const game = new Game(this, playerX, playerO)
     this.setState({
-      game: new Game(),
+      game: game,
+      board: game.board,
     });
+    this.announcePlayerTurn(playerX.getSymbol());
   }
 
   printBoard(board) {
@@ -124,9 +131,27 @@ class Main extends React.Component {
     });
   }
 
-  announcePlayerTurn(message) {
+  announcePlayerTurn(currentPlayer) {
     this.setState({
-      message: message
+      message: `${currentPlayer}, it's your turn`
+    })
+  }
+
+  announceWinner(winningSymbol) {
+    this.setState({
+      message: `Player ${winningSymbol} wins!`
+    })
+  }
+
+  announceTie() {
+    this.setState({
+      message: `It's a tie!`
+    })
+  }
+
+  greetPlayers() {
+    this.setState({
+      message: `Welcome to Reactictoe! X, it's your turn`
     })
   }
 }
