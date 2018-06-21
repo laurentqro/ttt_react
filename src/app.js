@@ -1,66 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
 import Game from '../vendor/ttt/lib/game';
 import Player from '../vendor/ttt/lib/player';
 
-function Cell(props) {
-  let className = props.value ? 'spin ' : '';
-  className += props.value
-
-  return (
-    <button className="cell" onClick={props.onClick}>
-      <div className={className}>{props.value}</div>
-    </button>
-  );
-}
-
-class Board extends React.Component {
-  renderCell(i) {
-    return (
-      <Cell
-        value={this.props.board.getCellAtPosition(i + 1).symbol}
-        onClick={() => this.props.onClick(i)}
-      />
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderCell(0)}
-          {this.renderCell(1)}
-          {this.renderCell(2)}
-        </div>
-        <div className="board-row">
-          {this.renderCell(3)}
-          {this.renderCell(4)}
-          {this.renderCell(5)}
-        </div>
-        <div className="board-row">
-          {this.renderCell(6)}
-          {this.renderCell(7)}
-          {this.renderCell(8)}
-        </div>
-      </div>
-    );
-  }
-}
-
-class WebPlayer extends Player {
-  constructor(symbol) {
-    super(symbol)
-
-    this.nextMove = 1
-  }
-
-  getInput() {
-    return {
-      move: this.nextMove
-    }
-  }
-}
+import Cell from './cell';
+import Board from './board';
+import WebPlayer from './webPlayer';
 
 class Main extends React.Component {
   constructor(props) {
