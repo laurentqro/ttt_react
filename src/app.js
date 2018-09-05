@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Game from '../api/game';
 
 const API_HOST = 'http://localhost:4000';
 
@@ -61,21 +60,8 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    fetch(API_HOST + '/play', { redirect: "follow" } )
-    .then(response => {
-      this.setState({
-        gameUrl: response.url
-      });
+    this.newGame();
 
-      response.json().then(data => {
-        this.setState({
-          isLoaded: true,
-          game: data,
-          board: data["board"],
-          message: 'Human, you go first',
-        });
-      });
-    });
   }
 
   render() {
@@ -104,7 +90,7 @@ class Main extends React.Component {
     if (this.state.game.game_state == 'won' || this.state.game.game_state == 'tie') {
       return (
         <div className="replay">
-          <button onClick={() => this.handleReplay()}>Play Again</button>
+          <button onClick={() => this.newGame()}>Play Again</button>
         </div>
       );
     }
@@ -132,7 +118,7 @@ class Main extends React.Component {
     }
   }
 
-  handleReplay() {
+  newGame() {
     fetch(API_HOST + '/play', { redirect: "follow" } )
     .then(response => {
       this.setState({
