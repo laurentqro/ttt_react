@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Game from '../vendor/ttt/lib/game';
-import Player from '../vendor/ttt/lib/player';
+import Game from '../api/game';
+
+const API_HOST = 'http://localhost:4000';
 
 function Cell(props) {
   let className = props.value ? 'spin ' : '';
@@ -19,7 +20,7 @@ class Board extends React.Component {
   renderCell(i) {
     return (
       <Cell
-        value={this.props.board.getCellAtPosition(i + 1).symbol}
+        value={this.props.board[i]}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -48,57 +49,59 @@ class Board extends React.Component {
   }
 }
 
-class WebPlayer extends Player {
-  constructor(symbol) {
-    super(symbol)
-
-    this.nextMove = 1
-  }
-
-  getInput() {
-    return {
-      move: this.nextMove
-    }
-  }
-}
-
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    const playerX = new WebPlayer('X');
-    const playerO = new WebPlayer('O');
 
-    const game = new Game(this, playerX, playerO)
     this.state = {
-      game: game,
-      board: game.board
+      game: null,
+      isLoaded: false,
+      message: '',
     }
   }
 
   componentDidMount() {
-    this.state.game.start();
+    fetch(API_HOST + '/play', { redirect: "follow" } )
+    .then(response => {
+      this.setState({
+        gameUrl: response.url
+      });
+
+      response.json().then(data => {
+        this.setState({
+          isLoaded: true,
+          game: data,
+          board: data["board"],
+          message: 'Human, you go first',
+        });
+      });
+    });
   }
 
   render() {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <div className="status">
-            {this.state.message}
-          </div>
+    if (!this.state.isLoaded) {
+      return <div>Loading ...</div>;
+    } else {
+      return (
+        <div className="game">
+          <div className="game-board">
+            <div className="status">
+              {this.state.message}
+            </div>
 
-          <Board
-            board={this.state.board}
-            onClick={(i) => this.handleClick(i)}
-          />
-          {this.renderReplayButton()}
+            <Board
+              board={this.state.board}
+              onClick={(i) => this.handleClick(i)}
+            />
+            {this.renderReplayButton()}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   renderReplayButton() {
-    if (this.state.game.isOver()) {
+    if (this.state.game.game_state == 'won' || this.state.game.game_state == 'tie') {
       return (
         <div className="replay">
           <button onClick={() => this.handleReplay()}>Play Again</button>
@@ -108,51 +111,43 @@ class Main extends React.Component {
   }
 
   handleClick(i) {
-    this.state.game.currentPlayer.nextMove = i + 1;
-    this.state.game.playTurn();
+    fetch(this.state.gameUrl + '/move/' + (i + 1))
+    .then(response => response.json())
+    .then(data => {
+      this.setState({
+        game: data,
+        board: data["board"],
+        message: this.makeAnnouncement(data),
+      });
+    });
+  }
+
+  makeAnnouncement(data) {
+    if (data["game_state"] == "won") {
+      return `${data["current_player"]["mark"]} wins!`;
+    }
+
+    if (data["game_state"] == "tie") {
+      return "Tie!";
+    }
   }
 
   handleReplay() {
-    console.log('replay');
-    const playerX = new WebPlayer('X');
-    const playerO = new WebPlayer('O');
+    fetch(API_HOST + '/play', { redirect: "follow" } )
+    .then(response => {
+      this.setState({
+        gameUrl: response.url
+      });
 
-    const game = new Game(this, playerX, playerO)
-    this.setState({
-      game: game,
-      board: game.board,
+      response.json().then(data => {
+        this.setState({
+          isLoaded: true,
+          game: data,
+          board: data["board"],
+          message: 'Human, you go first',
+        });
+      });
     });
-    this.announcePlayerTurn(playerX.getSymbol());
-  }
-
-  printBoard(board) {
-    this.setState({
-      board: board
-    });
-  }
-
-  announcePlayerTurn(currentPlayer) {
-    this.setState({
-      message: `${currentPlayer}, it's your turn`
-    })
-  }
-
-  announceWinner(winningSymbol) {
-    this.setState({
-      message: `Player ${winningSymbol} wins!`
-    })
-  }
-
-  announceTie() {
-    this.setState({
-      message: `It's a tie!`
-    })
-  }
-
-  greetPlayers() {
-    this.setState({
-      message: `Welcome to Reactictoe! X, it's your turn`
-    })
   }
 }
 
