@@ -99,21 +99,21 @@ class Main extends React.Component {
   handleClick(i) {
     fetch(this.state.gameUrl + '/move/' + (i + 1))
     .then(response => response.json())
-    .then(data => {
+    .then(game => {
       this.setState({
-        game: data,
-        board: data["board"],
-        message: this.makeAnnouncement(data),
+        game: game,
+        board: game["board"],
+        message: this.makeAnnouncement(game),
       });
     });
   }
 
-  makeAnnouncement(data) {
-    if (data["game_state"] == "won") {
-      return `${data["current_player"]["mark"]} wins!`;
+  makeAnnouncement(game) {
+    if (game["game_state"] == "won") {
+      return `${game["current_player"]["mark"]} wins!`;
     }
 
-    if (data["game_state"] == "tie") {
+    if (game["game_state"] == "tie") {
       return "Tie!";
     }
   }
@@ -125,11 +125,11 @@ class Main extends React.Component {
         gameUrl: response.url
       });
 
-      response.json().then(data => {
+      response.json().then(game => {
         this.setState({
           isLoaded: true,
-          game: data,
-          board: data["board"],
+          game: game,
+          board: game["board"],
           message: 'Human, you go first',
         });
       });
